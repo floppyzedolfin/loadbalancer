@@ -25,17 +25,20 @@ type LoadBalancer interface {
 }
 
 // MyLoadBalancer is the load balancer you should modify!
-type MyLoadBalancer struct{}
+type MyLoadBalancer struct{
+	instances []chan Request
+}
 
 // Request is currently a dummy implementation. Please implement it!
 func (lb *MyLoadBalancer) Request(payload interface{}) chan Response {
-	ch := make(chan Response, 1)
-
-	return ch
+	req := Request{RspChan: make(chan Response, 1)}
+	lb.instances[0] <- req
+	return req.RspChan
 }
 
 // RegisterInstance is currently a dummy implementation. Please implement it!
 func (lb *MyLoadBalancer) RegisterInstance(ch chan Request) {
+	lb.instances = append(lb.instances, ch)
 	return
 }
 
@@ -99,8 +102,10 @@ func main() {
 			case <-time.After(5 * time.Second):
 				fmt.Println("Timeout")
 			}
+		case "exit":
+			return
 		default:
-			fmt.Printf("Unknown command: %s Available commands: time, spawn, kill\n", cmd)
+			fmt.Printf("Unknown command: %s Available commands: time, spawn, kill, exit\n", cmd)
 		}
 	}
 }
