@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/floppyzedolfin/loadbalancer/api"
-	"github.com/floppyzedolfin/loadbalancer/log"
+	"github.com/floppyzedolfin/loadbalancer/twig"
 )
 
 // LoadBalancer is used for balancing load between multiple instances of a service.
@@ -30,9 +30,9 @@ func (lb *MyLoadBalancer) Request(payload interface{}) chan api.Response {
 		success := lb.sendTo(k, req)
 		if !success {
 			deadInstances = append(deadInstances, k)
-			log.Log("instance %s appears to be dead", k)
+			twig.Printf("instance %s appears to be dead", k)
 		} else {
-			log.Log("message sent to instance %s", k)
+			twig.Printf("message sent to instance %s", k)
 			// let's not try and find other dead instances -- yet
 			break
 		}
@@ -42,7 +42,7 @@ func (lb *MyLoadBalancer) Request(payload interface{}) chan api.Response {
 		delete(lb.instances, deadInstance)
 	}
 	if len(deadInstances) > 0 {
-		log.Log("removed instances %v, %d instances left", deadInstances, len(lb.instances))
+		twig.Printf("removed instances %v, %d instances left", deadInstances, len(lb.instances))
 	}
 
 	// if no instance was found, this RspChan will never be populated
@@ -71,6 +71,6 @@ func (lb *MyLoadBalancer) RegisterInstance(ch chan api.Request) {
 	// generate a random key
 	key := uuid.New().String()
 	lb.instances[key] = ch
-	log.Log("registering instance %s", key)
+	twig.Printf("registering instance %s", key)
 	return
 }

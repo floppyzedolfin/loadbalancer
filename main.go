@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/floppyzedolfin/loadbalancer/loadbalancer"
-	"github.com/floppyzedolfin/loadbalancer/log"
 	"github.com/floppyzedolfin/loadbalancer/timeservice"
+	"github.com/floppyzedolfin/loadbalancer/twig"
 )
 
 // main runs an interactive console for spawning, killing and asking for the
@@ -47,7 +47,7 @@ func main() {
 		case "exit":
 			return
 		case "debug":
-			log.Switch()
+			twig.Switch()
 		default:
 			fmt.Printf("Unknown command: %s Available commands: time, spawn, kill, debug, exit\n", cmd)
 		}
