@@ -209,4 +209,3 @@ tests run smoothly.
 - The current implementation doesn't handle load at all. It merely routes to 
   an instance. We would need to add a gauge somewhere (either on the load 
   balancer or on the endpoint to achieve this.
-  

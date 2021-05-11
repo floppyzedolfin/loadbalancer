@@ -20,7 +20,7 @@ func main() {
 	rand.Seed(int64(time.Now().Nanosecond()))
 
 	bio := bufio.NewReader(os.Stdin)
-		var lb api.LoadBalancer = &loadbalancer.MyLoadBalancer{}
+	var lb api.LoadBalancer = &loadbalancer.MyLoadBalancer{}
 
 	manager := &timeservice.TimeServiceManager{}
 
