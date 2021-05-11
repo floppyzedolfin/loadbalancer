@@ -1,5 +1,12 @@
 # Load Balancer
 
+## Get it
+
+Use the following command to get the contents of the repo:
+```
+git clone https://github.com/floppyzedolfin/loadbalancer.git
+```
+
 ## Try it!
 
 Here are a couple of tests one can run to ensure this works as expected:
@@ -53,7 +60,7 @@ $ make run
 
 - Two instances of the service, down to none, returns a timeout
 
-```go
+```
 $ make run
 > spawn
 > spawn
@@ -83,7 +90,7 @@ registering instance debe63e1-9a4e-4592-97f0-5f741a446030
 > time
 instance debe63e1-9a4e-4592-97f0-5f741a446030 appears to be dead
 message sent to instance 7a09258a-e7de-4b4a-99cb-acf7b1b48e90
-removed instances [debe63e1-9a4e-4592-97f0-5f741a446030], 2 instances left
+removed instance(s) [debe63e1-9a4e-4592-97f0-5f741a446030], 2 instance(s) left
 2021-05-11 01:30:24.272103558 +0200 CEST m=+30.992665852
 > time
 message sent to instance 7a09258a-e7de-4b4a-99cb-acf7b1b48e90
@@ -91,8 +98,11 @@ message sent to instance 7a09258a-e7de-4b4a-99cb-acf7b1b48e90
 > time
 instance 3a8948e0-70b8-4bfd-80e1-1c01dbe4341a appears to be dead
 message sent to instance 7a09258a-e7de-4b4a-99cb-acf7b1b48e90
-removed instances [3a8948e0-70b8-4bfd-80e1-1c01dbe4341a], 1 instances left
+removed instance(s) [3a8948e0-70b8-4bfd-80e1-1c01dbe4341a], 1 instance(s) left
 2021-05-11 01:31:46.824926293 +0200 CEST m=+113.545488580
+> debug
+> time
+2021-05-11 01:31:47.824926293 +0200 CEST m=+114.545488580
 > exit
 ```
 

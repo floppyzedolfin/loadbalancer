@@ -44,24 +44,30 @@ func TestMyLoadBalancer_Request(t *testing.T) {
 		"channel3": make(chan api.Request, 10),
 	}}
 
+	// create fake responders
 	fakePongs(lb)
 
-	resChan := lb.Request(nil)
+	{
+		// Send a message and check the result
+		resChan := lb.Request(nil)
+		// read the message
+		msg := <-resChan
+		// we can't know whether it was 1 or 3, but one of them answered
+		assert.Regexp(t, "hello, channel[123]", msg)
+	}
 
-	// read the message
-	msg := <-resChan
-
-	// we can't know whether it was 1 or 3, but one of them answered
-	assert.Regexp(t, "hello, channel[123]", msg)
-
+	// Now kill some services
 	close(lb.instances["channel1"])
 	close(lb.instances["channel2"])
 
-	resChan = lb.Request(nil)
-	msg = <- resChan
-	assert.Equal(t, "hello, channel3", msg)
-	// we can't guarantee we removed instances
-	assert.GreaterOrEqual(t, 3, len(lb.instances))
+	{
+		// Send the message, check the contents, and try and see if we have removed instances
+		resChan := lb.Request(nil)
+		msg := <-resChan
+		assert.Equal(t, "hello, channel3", msg)
+		// we can't guarantee we removed instances
+		assert.GreaterOrEqual(t, 3, len(lb.instances))
+	}
 }
 
 func fakePongs(lb *MyLoadBalancer) {
