@@ -7,12 +7,6 @@ import (
 	"github.com/floppyzedolfin/loadbalancer/twig"
 )
 
-// LoadBalancer is used for balancing load between multiple instances of a service.
-type LoadBalancer interface {
-	Request(payload interface{}) chan api.Response
-	RegisterInstance(chan api.Request)
-}
-
 // MyLoadBalancer implements the LoadBalancer interface
 type MyLoadBalancer struct {
 	instances map[string]chan api.Request
@@ -20,6 +14,7 @@ type MyLoadBalancer struct {
 
 // Request sends a request to an instance and returns the channel of the response
 func (lb *MyLoadBalancer) Request(payload interface{}) chan api.Response {
+	// Create a request that'll contain the output channel
 	req := api.Request{RspChan: make(chan api.Response, 1), Payload: payload}
 	deadInstances := make([]string, 0)
 	// loop over the available instances
@@ -33,19 +28,20 @@ func (lb *MyLoadBalancer) Request(payload interface{}) chan api.Response {
 			twig.Printf("instance %s appears to be dead", k)
 		} else {
 			twig.Printf("message sent to instance %s", k)
-			// let's not try and find other dead instances -- yet
+			// let's not try and find other dead instances -- that'll be a job for the next call to Request
 			break
 		}
 	}
+
 	// cleanup - remove dead instances
 	for _, deadInstance := range deadInstances {
 		delete(lb.instances, deadInstance)
 	}
 	if len(deadInstances) > 0 {
-		twig.Printf("removed instances %v, %d instances left", deadInstances, len(lb.instances))
+		twig.Printf("removed instance(s) %v, %d instance(s) left", deadInstances, len(lb.instances))
 	}
 
-	// if no instance was found, this RspChan will never be populated
+	// if no instance was found, nothing will ever come out of this RspChan
 	return req.RspChan
 }
 

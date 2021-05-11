@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/floppyzedolfin/loadbalancer/api"
 	"github.com/floppyzedolfin/loadbalancer/loadbalancer"
 	"github.com/floppyzedolfin/loadbalancer/timeservice"
 	"github.com/floppyzedolfin/loadbalancer/twig"
@@ -19,7 +20,7 @@ func main() {
 	rand.Seed(int64(time.Now().Nanosecond()))
 
 	bio := bufio.NewReader(os.Stdin)
-	var lb loadbalancer.LoadBalancer = &loadbalancer.MyLoadBalancer{}
+		var lb api.LoadBalancer = &loadbalancer.MyLoadBalancer{}
 
 	manager := &timeservice.TimeServiceManager{}
 
